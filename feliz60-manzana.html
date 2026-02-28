@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="rgb(26,10,0)"/>
+  <title>🍎 Feliz 60, Manzana!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --glass:rgba(255,255,255,.11);
+      --stroke:rgba(255,255,255,.17);
+      --txt:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.62);
+      --shadow:0 18px 56px rgba(0,0,0,.42);
+      --r:20px;
+      --max:440px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{font-family:'DM Sans',system-ui,sans-serif;color:var(--txt);overflow-x:hidden;-webkit-tap-highlight-color:transparent;transition:background 1.4s ease;}
+
+    /* THEMES — warm sunset palette for the 60s vibes */
+    body.t0{background:radial-gradient(800px at 10% 15%,rgba(0,220,130,.8),transparent 55%),radial-gradient(700px at 90% 20%,rgba(80,60,255,.7),transparent 55%),radial-gradient(700px at 55% 90%,rgba(255,60,180,.65),transparent 55%),linear-gradient(120deg,#050f0a,#0a0520);}
+    body.t1{background:radial-gradient(800px at 20% 25%,rgba(255,220,0,.85),transparent 55%),radial-gradient(700px at 80% 70%,rgba(255,60,120,.8),transparent 50%),radial-gradient(600px at 50% 50%,rgba(0,200,255,.5),transparent 55%),linear-gradient(150deg,#0a0800,#000a12);}
+    body.t2{background:radial-gradient(800px at 50% 10%,rgba(120,0,255,.85),transparent 50%),radial-gradient(700px at 10% 80%,rgba(0,255,180,.75),transparent 55%),radial-gradient(600px at 90% 90%,rgba(255,120,0,.6),transparent 50%),linear-gradient(160deg,#080010,#001a10);}
+    body.t3{background:radial-gradient(800px at 80% 20%,rgba(255,60,80,.85),transparent 55%),radial-gradient(600px at 20% 75%,rgba(0,220,255,.75),transparent 50%),radial-gradient(600px at 50% 50%,rgba(180,255,0,.4),transparent 55%),linear-gradient(130deg,#10000a,#001015);}
+    body.t4{background:radial-gradient(800px at 30% 40%,rgba(255,180,0,.85),transparent 55%),radial-gradient(700px at 70% 60%,rgba(0,200,140,.75),transparent 50%),radial-gradient(600px at 80% 10%,rgba(200,0,255,.6),transparent 50%),linear-gradient(120deg,#0a0800,#080012);}
+
+    .bg-spin{position:fixed;inset:-35%;filter:blur(72px);animation:spin 20s linear infinite;z-index:-1;opacity:.8;transition:background 1.4s ease;}
+    .t0 .bg-spin{background:conic-gradient(from 180deg,rgba(0,220,130,.25),rgba(80,60,255,.22),rgba(255,60,180,.2),rgba(0,220,130,.25));}
+    .t1 .bg-spin{background:conic-gradient(from 0deg,rgba(255,220,0,.28),rgba(255,60,120,.25),rgba(0,200,255,.22),rgba(255,220,0,.28));}
+    .t2 .bg-spin{background:conic-gradient(from 90deg,rgba(120,0,255,.28),rgba(0,255,180,.25),rgba(255,120,0,.2),rgba(120,0,255,.28));}
+    .t3 .bg-spin{background:conic-gradient(from 270deg,rgba(255,60,80,.25),rgba(0,220,255,.25),rgba(180,255,0,.2),rgba(255,60,80,.25));}
+    .t4 .bg-spin{background:conic-gradient(from 180deg,rgba(255,180,0,.28),rgba(0,200,140,.25),rgba(200,0,255,.2),rgba(255,180,0,.28));}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    #cc{position:fixed;inset:0;pointer-events:none;z-index:999;}
+
+    /* BONUS MODAL */
+    #bonusModal{
+      position:fixed;inset:0;z-index:200;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:32px 28px;text-align:center;gap:22px;
+      background:radial-gradient(800px at 20% 20%,rgba(0,220,130,.85),transparent 55%),
+        radial-gradient(700px at 80% 80%,rgba(80,60,255,.8),transparent 50%),
+        radial-gradient(600px at 50% 50%,rgba(255,60,180,.6),transparent 55%),
+        linear-gradient(150deg,#050f0a,#0a0520);
+      opacity:0;pointer-events:none;
+      transition:opacity .6s ease,transform .6s ease;
+      transform:scale(.96);
+    }
+    #bonusModal.show{opacity:1;pointer-events:auto;transform:scale(1);}
+    .bm-emoji{font-size:72px;animation:bob 1.4s ease-in-out infinite alternate;}
+    .bm-title{font-family:'Playfair Display',serif;font-size:clamp(26px,7vw,44px);font-weight:900;line-height:1.1;letter-spacing:-.4px;text-shadow:0 4px 24px rgba(0,0,0,.4);}
+    .bm-msg{font-size:clamp(15px,3.5vw,18px);line-height:1.7;color:rgba(255,255,255,.95);max-width:30ch;}
+    .bm-beers{font-size:48px;letter-spacing:4px;animation:bob 1.2s ease-in-out infinite alternate;}
+    .bm-close{margin-top:4px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;padding:14px 36px;border-radius:999px;cursor:pointer;touch-action:manipulation;transition:transform .12s,background .12s;}
+    .bm-close:active{transform:translateY(2px);background:rgba(255,255,255,.2);}
+
+    /* SPLASH */
+    #splash{
+      position:fixed;inset:0;z-index:100;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:20px;padding:40px 28px;text-align:center;
+      background:radial-gradient(800px at 10% 15%,rgba(0,220,130,.8),transparent 55%),radial-gradient(700px at 90% 20%,rgba(80,60,255,.7),transparent 55%),radial-gradient(700px at 55% 90%,rgba(255,60,180,.65),transparent 55%),linear-gradient(120deg,#050f0a,#0a0520);
+      transition:opacity .9s ease,transform .9s ease;
+    }
+    #splash.out{opacity:0;transform:scale(1.06);pointer-events:none;}
+    .s-emoji{font-size:80px;animation:bob 1.5s ease-in-out infinite alternate;}
+    @keyframes bob{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-14px) rotate(3deg)}}
+    .s-title{font-family:'Playfair Display',serif;font-size:clamp(28px,8vw,50px);font-weight:900;line-height:1.06;letter-spacing:-.5px;text-shadow:0 4px 28px rgba(0,0,0,.4);}
+    .s-sub{font-size:clamp(14px,3vw,17px);color:var(--muted);line-height:1.6;max-width:30ch;}
+    .s-btn{margin-top:10px;border:none;background:linear-gradient(135deg,#00dc82,#5040ff);color:#fff;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding:18px 44px;border-radius:999px;cursor:pointer;box-shadow:0 16px 44px rgba(0,200,130,.45);letter-spacing:.3px;transition:transform .15s,box-shadow .15s;touch-action:manipulation;}
+    .s-btn:active{transform:translateY(2px);box-shadow:0 6px 20px rgba(0,200,130,.3);}
+
+    /* PAGE */
+    .page{min-height:100svh;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:12px;}
+
+    .hdr{width:100%;max-width:var(--max);display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+    .av-small{width:44px;height:44px;min-width:44px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);display:grid;place-items:center;font-size:22px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+    .hdr-text h1{font-family:'Playfair Display',serif;font-size:clamp(15px,4vw,20px);line-height:1.1;letter-spacing:-.2px;}
+    .hdr-text p{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
+
+    .wish-zone{width:100%;max-width:var(--max);min-height:160px;position:relative;display:flex;align-items:center;justify-content:center;}
+    .wish-placeholder{text-align:center;color:var(--muted);font-size:14px;line-height:1.5;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .3s;}
+    .wish-placeholder .ph-emoji{font-size:36px;animation:float2 2s ease-in-out infinite alternate;}
+    @keyframes float2{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+    .wish-placeholder.hidden{opacity:0;pointer-events:none;}
+    .wish-card{position:absolute;inset:0;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:16px 18px;display:flex;flex-direction:column;gap:8px;opacity:0;transform:translateY(60px) scale(.9);pointer-events:none;transition:opacity .5s cubic-bezier(.2,.9,.2,1),transform .5s cubic-bezier(.2,.9,.2,1);}
+    .wish-card.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+    .wc-top{display:flex;align-items:center;gap:10px;}
+    .wc-emoji{font-size:38px;line-height:1;}
+    .wc-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;line-height:1.2;}
+    .wc-msg{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.90);}
+    .wc-meta{font-size:11px;color:var(--muted);}
+
+    .gift-wrap{display:flex;flex-direction:column;align-items:center;gap:0;}
+    .connector{width:2px;height:20px;background:linear-gradient(rgba(255,255,255,.25),rgba(255,255,255,.05));border-radius:2px;opacity:0;transition:opacity .4s;}
+    .connector.show{opacity:1;}
+    .gift{width:150px;height:145px;position:relative;cursor:pointer;user-select:none;touch-action:manipulation;outline:none;transition:transform .12s;}
+    .gift:active{transform:scale(.95);}
+    .g-box{position:absolute;left:18px;right:18px;bottom:0;height:84px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.19),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.17);box-shadow:0 14px 32px rgba(0,0,0,.3);}
+    .g-rv{position:absolute;left:50%;bottom:0;width:19px;height:84px;transform:translateX(-50%);border-radius:10px;background:linear-gradient(180deg,rgba(255,120,30,.85),rgba(255,120,30,.3));}
+    .g-rh{position:absolute;left:18px;right:18px;bottom:38px;height:19px;border-radius:10px;background:linear-gradient(90deg,rgba(255,200,30,.75),rgba(255,80,0,.55));}
+    .g-lid{position:absolute;left:7px;right:7px;bottom:74px;height:46px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.10));border:1px solid rgba(255,255,255,.18);transform-origin:18% 100%;transform:rotate(0deg) translateY(0);transition:transform .5s cubic-bezier(.2,.9,.2,1);box-shadow:0 10px 24px rgba(0,0,0,.22);}
+    .g-bow{position:absolute;left:50%;bottom:101px;transform:translateX(-50%);width:70px;height:34px;display:flex;gap:6px;align-items:center;justify-content:center;pointer-events:none;}
+    .g-bow:before,.g-bow:after{content:"";width:28px;height:22px;border-radius:22px 22px 22px 4px;background:rgba(255,120,30,.65);border:1px solid rgba(255,255,255,.18);transform:rotate(12deg);box-shadow:0 8px 18px rgba(0,0,0,.18);}
+    .g-bow:after{border-radius:22px 22px 4px 22px;transform:rotate(-12deg);background:rgba(255,200,0,.6);}
+    .g-sparks{position:absolute;inset:-8px;pointer-events:none;opacity:0;transition:opacity .25s;display:grid;place-items:center;font-size:24px;animation:floaty 1s ease-in-out infinite alternate;}
+    @keyframes floaty{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+    .gift.open .g-lid{transform:rotate(-30deg) translateY(-14px);}
+    .gift.open .g-sparks{opacity:1;}
+
+    .dice-section{width:100%;max-width:var(--max);background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:18px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+    .hint{font-size:12px;color:var(--muted);text-align:center;}
+    .dice-wrap{width:104px;height:104px;perspective:900px;cursor:pointer;user-select:none;touch-action:manipulation;transition:transform .12s;}
+    .dice-wrap:active{transform:scale(.94);}
+    .dice{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 900ms cubic-bezier(.2,.9,.2,1);will-change:transform;}
+    .face{position:absolute;inset:0;border-radius:15px;background:linear-gradient(145deg,#fafaf5 60%,#eaeae0);border:1px solid rgba(0,0,0,.07);box-shadow:inset 0 2px 5px rgba(255,255,255,.95),0 12px 28px rgba(0,0,0,.42);display:grid;place-items:center;}
+    .f1{transform:translateZ(52px);}.f2{transform:rotateY(90deg) translateZ(52px);}.f3{transform:rotateY(180deg) translateZ(52px);}.f4{transform:rotateY(-90deg) translateZ(52px);}.f5{transform:rotateX(90deg) translateZ(52px);}.f6{transform:rotateX(-90deg) translateZ(52px);}
+    .dots{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);width:70px;height:70px;}
+    .dot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a3a3a,#0f0f0f);box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 1px rgba(255,255,255,.05);margin:auto;opacity:0;}
+    .face[data-n="1"] .dot:nth-child(5){opacity:1;}
+    .face[data-n="2"] .dot:nth-child(3){opacity:1;}.face[data-n="2"] .dot:nth-child(7){opacity:1;}
+    .face[data-n="3"] .dot:nth-child(3){opacity:1;}.face[data-n="3"] .dot:nth-child(5){opacity:1;}.face[data-n="3"] .dot:nth-child(7){opacity:1;}
+    .face[data-n="4"] .dot:nth-child(1){opacity:1;}.face[data-n="4"] .dot:nth-child(3){opacity:1;}.face[data-n="4"] .dot:nth-child(7){opacity:1;}.face[data-n="4"] .dot:nth-child(9){opacity:1;}
+    .face[data-n="5"] .dot:nth-child(1){opacity:1;}.face[data-n="5"] .dot:nth-child(3){opacity:1;}.face[data-n="5"] .dot:nth-child(5){opacity:1;}.face[data-n="5"] .dot:nth-child(7){opacity:1;}.face[data-n="5"] .dot:nth-child(9){opacity:1;}
+    .face[data-n="6"] .dot:nth-child(1){opacity:1;}.face[data-n="6"] .dot:nth-child(3){opacity:1;}.face[data-n="6"] .dot:nth-child(4){opacity:1;}.face[data-n="6"] .dot:nth-child(6){opacity:1;}.face[data-n="6"] .dot:nth-child(7){opacity:1;}.face[data-n="6"] .dot:nth-child(9){opacity:1;}
+
+    .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%;}
+    .btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:var(--txt);border-radius:14px;padding:13px 16px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;font-size:14px;letter-spacing:.2px;touch-action:manipulation;flex:1;max-width:180px;transition:transform .12s,background .12s;}
+    .btn:active{transform:translateY(1px);}
+    .btn.primary{background:linear-gradient(135deg,rgba(255,100,0,.55),rgba(255,180,0,.45));border-color:rgba(255,255,255,.22);}
+
+    .footer{font-size:11px;color:var(--muted);text-align:center;padding:2px 4px;}
+
+    @media(prefers-reduced-motion:reduce){
+      .bg-spin,.g-sparks{animation:none}.dice,.g-lid,.wish-card{transition:none}
+    }
+  </style>
+</head>
+<body class="t0">
+  <canvas id="cc"></canvas>
+  <div class="bg-spin" aria-hidden="true"></div>
+
+  <!-- SPLASH -->
+  <div id="splash">
+    <div class="s-emoji">🍎</div>
+    <div class="s-title">Manzana,<br>això és per a tu.</div>
+    <div class="s-sub">Un mensaje con todo el cariño del mundo para celebrar tus 60 añazos chingones 🍺</div>
+    <button class="s-btn" id="openBtn">🍎 Abrir mi regalo</button>
+  </div>
+
+  <!-- BONUS MODAL -->
+  <div id="bonusModal">
+    <div class="bm-emoji">🌅</div>
+    <div class="bm-title">MORE PLENITUD 🍎<br>LONGER PLENITUD</div>
+    <div class="bm-msg">Oye, Manzana güey… ¿te acuerdas cuando bromeábamos con que los hombres a los 50 llegaban a su máxima plenitud? Pos resulta que sí era verdad. Y ahora a los 60… ¡more plenitud, longer plenitud, plenitud extra! No empieza nada nuevo — simplemente se suman <em>uns quants anys més de la mateixa plenitud de sempre.</em> La plenitud, güey, solo se expande. Benvingut a la dècada de l'or. 🥇🍎</div>
+    <div class="bm-beers">🍺🍺🍺🍺🍺🍺</div>
+    <button class="bm-close" id="bonusClose">✨ Tancar · Cerrar</button>
+  </div>
+
+  <div class="page">
+
+    <div class="hdr">
+      <div class="av-small">🍎</div>
+      <div class="hdr-text">
+        <h1>🎂 Feliços 60, Manzana! 🍎</h1>
+        <p>Tira el dado i la caixa et deixa anar el regal · 60 anyets chingonas</p>
+      </div>
+    </div>
+
+    <div class="wish-zone" id="wishZone">
+      <div class="wish-placeholder" id="wishPlaceholder">
+        <span class="ph-emoji">🎁</span>
+        <span>Tira el dado para abrir<br>tu primer regalo</span>
+      </div>
+      <div class="wish-card" id="wishCard">
+        <div class="wc-top">
+          <div class="wc-emoji" id="wcEmoji">🎁</div>
+          <div class="wc-title" id="wcTitle">—</div>
+        </div>
+        <div class="wc-msg" id="wcMsg">—</div>
+        <div class="wc-meta" id="wcMeta"></div>
+      </div>
+    </div>
+
+    <div class="connector" id="connector"></div>
+
+    <div class="gift-wrap">
+      <div class="gift" id="gift" role="button" aria-label="Caixa de regal" tabindex="0">
+        <div class="g-sparks">✨🎉🍎</div>
+        <div class="g-bow"></div>
+        <div class="g-lid"></div>
+        <div class="g-box"></div>
+        <div class="g-rv"></div>
+        <div class="g-rh"></div>
+      </div>
+    </div>
+
+    <div class="dice-section">
+      <div class="dice-wrap" id="diceBtn" role="button" aria-label="Tirar el dado" tabindex="0">
+        <div class="dice" id="dice">
+          <div class="face f1" data-n="1"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+          <div class="face f2" data-n="2"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+          <div class="face f3" data-n="3"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+          <div class="face f4" data-n="4"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+          <div class="face f5" data-n="5"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+          <div class="face f6" data-n="6"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+        </div>
+      </div>
+      <div class="hint">Toca el dado o el botón 👇</div>
+      <div class="btns">
+        <button class="btn primary" id="roll">🎲 Tirar dado</button>
+        <button class="btn" id="bgBtn">🌅 Cambiar vibe</button>
+        <button class="btn" id="bonusBtn" style="background:linear-gradient(135deg,rgba(0,220,130,.5),rgba(80,60,255,.45));border-color:rgba(0,220,130,.4);width:100%;max-width:100%;">🍎 BONUS REGALO</button>
+      </div>
+    </div>
+
+    <div class="footer">Fet amb molt de carinyo, birres imaginàries i café no robat ✨</div>
+  </div>
+
+  <script>
+    const WISHES=[
+      {
+        emoji:"🧘",
+        title:"Descomptes de persona gran i respectable",
+        msg:"A partir d'avui, Manzana, tens dret a tots els descomptes: transport, museus, cinema, yoga, ioga, pilates, tai-txi, aquagym i el que vulguis. No només al yoga, eh — en TOT. Ets gran i respectable i el món t'ho ha de reconèixer. Sense vergonya, güey. Fes-ho servir. 🙏✨"
+      },
+      {
+        emoji:"🍺",
+        title:"Moltes birres ben gelades",
+        msg:"Muchas, muchas, MUCHÍSIMAs cervezas heladas. Las que hagan falta para brindar por cada uno de tus 60 años chingones. Cada birra con su espumita, su frescor y su merecidísimo sorbo de señor respetable. ¡Salud, Manzana! 🍺🍺🍺"
+      },
+      {
+        emoji:"⚖️",
+        title:"Estabilitat i equilibri total",
+        msg:"No nomes per caminar — per CÓRRER per la calle si li dona la gana! Equilibri de ferro, estabilitat de roure centenari i una coordinació envejable. Que els de 30 et mirin i s'ho facin mirar. Vinga, Manzana, a correr! 🏃‍♂️💨"
+      },
+      {
+        emoji:"☕",
+        title:"Cafè deliciós i calentó",
+        msg:"Un café delicioso, calientito, aromático y con todo el sabor del mundo. Y que conste: NO ROBADO. Pagado con orgullo, disfrutado con calma, como corresponde a un señor de 60 años respetable. Con su vasito de agua al lado y todo. ¡Chin chin! ☕✨"
+      },
+      {
+        emoji:"💰",
+        title:"Pasta. Tota. Molta. Chingos.",
+        msg:"Dinero, pasta, lana, parné, guita — com ho vulguis dir. Tota la que necessites per complir tots els teus somnis de senyor adult respectable. Viatges, caprichos, regalar birres als amics, lo que sigui. Seixanta anys mereix seixanta mil motius per gastar sense culpa. 💸🎉"
+      },
+      {
+        emoji:"😎",
+        title:"Unes ulleres xulíssimes",
+        msg:"¡Las gafas más chingonas del mundo mundial! Para no perderte ni un atardecer hermoso, ni una sonrisa, ni un menú de bar, ni una sola cosa bonita de la vida. Unas gafas de señor con estilo, que digan 'yo soy Manzana y lo veo todo clarísimo'. Porque a los 60, la vista… y el estilo. 😎🌅"
+      },
+    ];
+
+    const BONUS={
+      emoji:"🌅",
+      title:"WELCOME TO THE 60'S!!",
+      msg:"Oye, Manzana güey… ¿te acuerdas cuando bromeábamos con que los hombres a los 50 llegaban a su máxima plenitud? Pos resulta que sí era verdad. Y ahora a los 60… ¡more plenitud, longer plenitud, plenitud extra! No empieza nada nuevo — simplemente se suman uns quants anys més de la mateixa plenitud de sempre. La plenitud, güey, solo se expande. Benvingut a la dècada de l'or. 🥇🍎"
+    };
+
+    const themes=['t0','t1','t2','t3','t4'];
+    let theme=0;
+    const $=s=>document.querySelector(s);
+
+    const gift=$('#gift'),dice=$('#dice'),rollBtn=$('#roll'),
+          diceBtn=$('#diceBtn'),bgBtn=$('#bgBtn'),
+          wishCard=$('#wishCard'),wishPlaceholder=$('#wishPlaceholder'),
+          connector=$('#connector'),
+          wcEmoji=$('#wcEmoji'),wcTitle=$('#wcTitle'),
+          wcMsg=$('#wcMsg'),wcMeta=$('#wcMeta');
+
+    const ROT=[{x:0,y:0},{x:0,y:-90},{x:0,y:180},{x:0,y:90},{x:-90,y:0},{x:90,y:0}];
+    let busy=false,audioCtx=null,firstRoll=true;
+
+    $('#openBtn').addEventListener('click',()=>{
+      const s=$('#splash');s.classList.add('out');
+      setTimeout(()=>s.style.display='none',950);
+    });
+
+    function pop(){
+      try{
+        if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+        const c=audioCtx,o=c.createOscillator(),g=c.createGain();
+        o.connect(g);g.connect(c.destination);
+        o.type='sine';
+        o.frequency.setValueAtTime(520,c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(220,c.currentTime+.18);
+        g.gain.setValueAtTime(.4,c.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.22);
+        o.start(c.currentTime);o.stop(c.currentTime+.22);
+      }catch(e){}
+    }
+
+    // confetti — warm sunset colors for Manzana
+    const canvas=$('#cc'),ctx=canvas.getContext('2d');
+    let parts=[],confActive=false;
+    function rsz(){canvas.width=innerWidth;canvas.height=innerHeight;}
+    window.addEventListener('resize',rsz);rsz();
+    function confetti(){
+      parts=[];
+      const cols=['#00dc82','#5040ff','#ff3cb4','#ffe066','#00c8ff','#ff6a00','#b4ff00','#ff3c3c'];
+      for(let i=0;i<220;i++)parts.push({x:Math.random()*canvas.width,y:-10-Math.random()*240,w:7+Math.random()*9,h:4+Math.random()*5,c:cols[0|Math.random()*cols.length],a:Math.random()*Math.PI*2,sp:(Math.random()-.5)*.2,vx:(Math.random()-.5)*4.5,vy:2.5+Math.random()*5,al:1});
+      confActive=true;anim();
+    }
+    function anim(){
+      if(!confActive)return;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      let alive=false;
+      for(const p of parts){p.y+=p.vy;p.x+=p.vx;p.a+=p.sp;if(p.y>canvas.height*.7)p.al-=.02;if(p.al>0){alive=true;ctx.save();ctx.globalAlpha=Math.max(0,p.al);ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}}
+      if(alive)requestAnimationFrame(anim);else{confActive=false;ctx.clearRect(0,0,canvas.width,canvas.height);}
+    }
+
+    function vib(p){try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+
+    function showWish(n){
+      const w=WISHES[n-1];
+      wishCard.classList.remove('show');
+      void wishCard.offsetWidth;
+      wcEmoji.textContent=w.emoji;
+      wcTitle.textContent=w.title;
+      wcMsg.textContent=w.msg;
+      wcMeta.textContent=n===6?'🎊 ¡El premi gros! Tira altra vegada si vols 😄':'Tira altra vegada si vols 😄';
+      setTimeout(()=>{wishCard.classList.add('show');connector.classList.add('show');},40);
+      if(firstRoll){wishPlaceholder.classList.add('hidden');firstRoll=false;}
+    }
+
+    function openBox(){
+      gift.classList.remove('open');
+      setTimeout(()=>{gift.classList.add('open');pop();},160);
+    }
+
+    function roll(){
+      if(busy)return;busy=true;
+      wishCard.classList.remove('show');
+      connector.classList.remove('show');
+      openBox();
+      const n=1+(0|Math.random()*6),r=ROT[n-1];
+      const ex=(2+(0|Math.random()*3))*360,ey=(2+(0|Math.random()*3))*360;
+      dice.style.transform=`rotateX(${r.x+ex}deg) rotateY(${r.y+ey}deg)`;
+      setTimeout(()=>{showWish(n);vib([18,30,18]);if(n===6)confetti();},320);
+      setTimeout(()=>{gift.classList.remove('open');busy=false;},1400);
+    }
+
+    rollBtn.addEventListener('click',roll);
+    diceBtn.addEventListener('click',roll);
+    [diceBtn,gift].forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();roll();}}));
+    bgBtn.addEventListener('click',()=>{theme=(theme+1)%themes.length;document.body.className=themes[theme];vib(18);});
+
+    const bonusModal=$('#bonusModal');
+    $('#bonusBtn').addEventListener('click',()=>{
+      bonusModal.classList.add('show');
+      confetti();vib([20,40,20,40,20]);pop();
+    });
+    $('#bonusClose').addEventListener('click',()=>{bonusModal.classList.remove('show');});
+    setTimeout(()=>dice.style.transform='rotateX(360deg) rotateY(360deg)',320);
+  </script>
+</body>
+</html>
